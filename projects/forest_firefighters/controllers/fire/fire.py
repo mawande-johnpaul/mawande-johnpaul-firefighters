@@ -1,17 +1,3 @@
-# Copyright 1996-2021 Cyberbotics Ltd.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 This supervisor controller simulate a wild fire in a Sassafras forest.
 """
@@ -76,6 +62,7 @@ class Robot():
         self.type = node.getTypeName()
         self.droppingWater = False
         self.waterBalls = []
+        self.customData_field = node.getField('customData')
 
     def dropWater(self, children, quantity):
         position = self.node.getField('translation').getSFVec3f()
@@ -85,6 +72,11 @@ class Robot():
                 f'name "water {len(self.waterBalls)} {self.name}" }}'
         children.importMFNodeFromString(-1, water)
         waterNode = children.getMFNode(-1)
+        
+        if waterNode.getTypeName() != "Water":
+            print("Error: Water node failed to spawn. Check PROTO imports.")
+            return
+            
         self.waterBalls.append(waterNode)
 
         # if this is a "Spot" robot, the water it throws will have an initial velocity
@@ -95,11 +87,12 @@ class Robot():
             waterNode.setVelocity(velocity)
 
     def cleanWater(self):
-        for waterBall in self.waterBalls:
+        for waterBall in self.waterBalls[:]:
             altitude = waterBall.getField('translation').getSFVec3f()[2]
             if altitude < 0:
                 self.waterBalls.remove(waterBall)
                 waterBall.remove()
+                
     def altitude(self):
         return self.node.getField('translation').getSFVec3f()[2]
 
@@ -265,7 +258,7 @@ class Fire(Supervisor):
             for robot in self.robots:
                 robot.cleanWater()
 
-                customData = robot.node.getField('customData').getSFString()
+                customData = robot.customData_field.getSFString()
                 if customData != "":
                     quantity_of_water = int(customData)
                     if quantity_of_water > 0:

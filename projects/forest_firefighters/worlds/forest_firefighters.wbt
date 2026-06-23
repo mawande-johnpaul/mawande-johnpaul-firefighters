@@ -7,6 +7,8 @@ WorldInfo {
   title "Uneven Terrain"
   ERP 0
   basicTimeStep 8
+  FPS 24
+  optimalThreadCount 2
   defaultDamping Damping {
     linear 0.5
     angular 0.5
@@ -14,7 +16,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.567261792493613 -0.4114308185698906 -0.7133994255028825 1.587329358437873
-  position -7.3520103077810575 3.056583670009892 25.98290708040411
+  position -14.922000201152722 0.5832366959421402 30.590879113758724
   near 0.001
 }
 TexturedBackground {
@@ -228,12 +230,6 @@ SquareManhole {
   rotation -0.5773502691896258 0.5773502691896258 0.5773502691896258 -2.094395307179586
   name "manhole(1)"
 }
-Spot {
-  translation 6.5 3.254 17.12
-  rotation 1 0 0 1.5708
-  controller "spot"
-  customData "0"
-}
 Mavic2Pro {
   translation 4 4 17.4
   rotation 0 0 1 0
@@ -266,4 +262,8 @@ Mavic2Pro {
       height 200
     }
   ]
+}
+Fire {
+  translation 7.542610320008416 16.912807936239716 19.672466257251983
+  scale 0.612236864104084 0.612236864104084 0.612236864104084
 }

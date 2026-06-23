@@ -71,14 +71,20 @@ class Mavic (Robot):
     def get_image_from_camera(self):
         """
         Take an image from the camera and prepare it for OpenCV processing:
-        - convert data type,
+        - read the raw image buffer and convert to a numpy array,
         - convert to RGB format (from BGRA), and
         - rotate & flip to match the actual image.
         Returns:
             image of the camera
         """
-        img = self.camera.getImageArray()
-        img = np.asarray(img, dtype=np.uint8)
+        width, height = self.camera.getWidth(), self.camera.getHeight()
+        # getImage() returns the raw BGRA byte buffer directly, which we read
+        # into a numpy array with frombuffer(). This avoids getImageArray(),
+        # which builds a deeply nested Python list pixel-by-pixel through the
+        # Webots Python bindings and was confirmed (via isolated testing) to
+        # crash the controller process on this Webots/Python combination.
+        raw_bytes = self.camera.getImage()
+        img = np.frombuffer(raw_bytes, np.uint8).reshape((height, width, 4))
         img = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
         img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
         return cv2.flip(img, 1)
@@ -198,6 +204,9 @@ class Mavic (Robot):
 
         fire_ratio = np.round(
             (cv2.countNonZero(mask_fire))/(img.size/3)*100, 2)
+
+        coord_fire = None  # default when no fire/smoke is detected this frame
+
         if fire_ratio > 0.15:  # Higher the fire ratio, higher the number of fire in the image
 
             # Detect the contours on the binary image using cv2.CHAIN_APPROX_NONE
@@ -230,7 +239,8 @@ class Mavic (Robot):
                     cv2.circle(drawing, (int(centers[i][0]), int(
                         centers[i][1])), int(radius[i]), color, 2)
                 cv2.imwrite("fire_detection.jpg", drawing)
-            return coord_fire
+
+        return coord_fire
 
     def run(self):
         t1 = self.getTime()
