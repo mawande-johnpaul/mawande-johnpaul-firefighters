@@ -100,6 +100,19 @@ class Mavic (Robot):
         yaw_disturbance = self.MAX_YAW_DISTURBANCE*angle_left/(2*np.pi)
         pitch_disturbance = clamp(np.log10(max(abs(angle_left), 1e-6)), self.MAX_PITCH_DISTURBANCE, 0.1)
 
+        # Ease off both forward thrust and heading correction on final approach.
+        # Bearing-to-target gets wildly sensitive once you're close -- a tiny
+        # sideways drift swings the desired heading by a huge angle -- so without
+        # damping both terms toward zero, the drone keeps nudging forward *and*
+        # spinning to chase that noisy bearing, which looks like it orbiting or
+        # dancing back and forth instead of settling over the target.
+        distance_to_target = np.hypot(self.target_position[0] - self.current_pose[0],
+                                       self.target_position[1] - self.current_pose[1])
+        slowdown_radius = 6.0
+        ease = clamp(distance_to_target / slowdown_radius, 0.0, 1.0)
+        pitch_disturbance *= ease
+        yaw_disturbance *= ease
+
         if self.tracking_fire and all([abs(x1 - x2) < 1.2 for (x1, x2) in zip(self.target_position, self.current_pose[0:2])]):
             self.water_to_drop = 15
 
