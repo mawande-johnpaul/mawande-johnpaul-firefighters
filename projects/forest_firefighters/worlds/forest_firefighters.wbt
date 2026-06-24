@@ -6,7 +6,6 @@ WorldInfo {
   ]
   title "Uneven Terrain"
   ERP 0
-  basicTimeStep 8
   FPS 24
   optimalThreadCount 2
   defaultDamping Damping {
@@ -15,8 +14,8 @@ WorldInfo {
   }
 }
 Viewpoint {
-  orientation 0.567261792493613 -0.4114308185698906 -0.7133994255028825 1.587329358437873
-  position -14.922000201152722 0.5832366959421402 30.590879113758724
+  orientation 0 1 0 0
+  position 12.484774655091067 14.378472856245669 106.95183863466522
   near 0.001
 }
 TexturedBackground {
@@ -210,6 +209,7 @@ Solid {
       rotation 0.7259334280100526 -0.48632327627699135 -0.4863232762769914 1.885753145363453
       size 5.372313879270189
       name "Sassafras 25"
+      burnt TRUE
     }
     Sassafras {
       translation 10.492678015987755 15.962995944201705 21.780466846370363
@@ -239,6 +239,17 @@ Mavic2Pro {
     "--patrol_coords=11 11, 21 11, 21 21, 11 21"
   ]
   customData "0"
+  bodySlot [
+    DistanceSensor {
+      name "front distance sensor"
+      lookupTable [
+        0 0 0
+        10 1000 0
+      ]
+      type "infra-red"
+      resolution 1
+    }
+  ]
   cameraSlot [
     Camera {
       width 200
@@ -256,6 +267,17 @@ Mavic2Pro {
     "--patrol_coord=21 21, 11 21, 11 11, 21 11"
   ]
   customData "0"
+  bodySlot [
+    DistanceSensor {
+      name "front distance sensor"
+      lookupTable [
+        0 0 0
+        10 1000 0
+      ]
+      type "infra-red"
+      resolution 1
+    }
+  ]
   cameraSlot [
     Camera {
       width 200
