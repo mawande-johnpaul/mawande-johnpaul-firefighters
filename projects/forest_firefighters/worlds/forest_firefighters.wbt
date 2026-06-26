@@ -6,6 +6,7 @@ WorldInfo {
   ]
   title "Uneven Terrain"
   ERP 0
+  basicTimeStep 8
   FPS 24
   optimalThreadCount 2
   defaultDamping Damping {

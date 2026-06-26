@@ -4,7 +4,8 @@ simulationViewPerspectives: 000000ff0000000100000002000001000000051a010000000201
 sceneTreePerspectives: 000000ff0000000100000002000000c0000000fa0100000002010000000200
 maximizedDockId: -1
 centralWidgetVisible: 1
-orthographicViewHeight: 1
+projectionMode: ORTHOGRAPHIC
+orthographicViewHeight: 28.0836
 textFiles: -1
 consoles: Console:All:All
 renderingDevicePerspectives: Mavic 2 PRO(2):camera;1;1.245;0;0
