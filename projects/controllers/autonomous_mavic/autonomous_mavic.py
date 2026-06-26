@@ -192,41 +192,6 @@ class DroneController(Robot):
             
         return yaw_disturbance, pitch_disturbance
 
-    def go_to_fire(self, fire_targets, verbose_target=True):
-        """
-        Bypasses standard navigation loops to calculate a direct intercept path 
-        towards the closest fire coordinate in the database.
-        
-        Parameters:
-            fire_targets (list): Available [X, Y] world coordinate coordinates of active hazards.
-            
-        Returns:
-            tuple: (yaw_disturbance, pitch_disturbance) directed towards the threat.
-        """
-        # Apply the distance formula to locate the closest absolute fire point.
-        nearest = min(fire_targets, key=lambda p: (p[0] - self.current_pose[0]) ** 2 + (p[1] - self.current_pose[1]) ** 2)
-
-        if self.target_position[0:2] != list(nearest):
-            self.target_position[0:2] = list(nearest)
-            if verbose_target:
-                print("Heading to fire at: ", self.target_position[0:2])
-
-        # Resolve interception angle and wrap within bounds.
-        self.target_position[2] = np.arctan2(
-            self.target_position[1] - self.current_pose[1],
-            self.target_position[0] - self.current_pose[0]
-        )
-        angle_left = self.target_position[2] - self.current_pose[5]
-        angle_left = (angle_left + 2 * np.pi) % (2 * np.pi)
-        if angle_left > np.pi:
-            angle_left -= 2 * np.pi
-
-        yaw_disturbance = self.MAX_YAW_DISTURBANCE * angle_left / (2 * np.pi)
-        pitch_disturbance = clamp(
-            np.log10(abs(angle_left)), self.MAX_PITCH_DISTURBANCE, 0.1
-        )
-        return yaw_disturbance, pitch_disturbance
-
     def visualServo(self, verbose=True):
         """
         Executes a closed-loop visual positioning adjustment, aligning the drone 
