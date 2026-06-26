@@ -312,7 +312,7 @@ class DroneController(Robot):
                     if verbose:
                         print("fire detected, coordinates {}".format(centers[i]))
 
-            if verbose:  
+            if verbose and coord_fire:  
                 # Visual overlay construction for diagnostic image export pipelines.
                 drawing = img.copy()
                 for i in range(len(contours)):
@@ -386,8 +386,8 @@ class DroneController(Robot):
                         yaw_disturbance, pitch_disturbance = self.goToCordinates(waypoints)
                     t1 = self.getTime()
                     
-                # CV Inspection Processing Loop (1 Hz frequency check).
-                if self.getTime() - t2 > 1:
+                # CV Inspection Processing Loop (10 Hz frequency check for real-time tracking accuracy).
+                if self.getTime() - t2 > 0.1:
                     if not self.WaterDropStatus:
                         self.img_coord_fire = self.detectFire()
                     t2 = self.getTime()
