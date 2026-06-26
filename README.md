@@ -1,15 +1,13 @@
-# webots-projects
+# Autonomous Forest-Fire Fighting System. (Detailed report in repo root.)
 
-This repo contains some additional Webots projects (PROTO files, controllers, simulation worlds, etc.) officially released by Cyberbotics but not included in the Webots package.
+This repo contains the implementation of an autonomous multi-drone coordination system using two Mavic-2 Pro drones to detect, localize, and extinguish forest fires within a dynamic Webots simulation environment with wind and smoke events. By combining computer vision pipelines with localized path-planning and status synchronization, the system successfully optimized regional coverage, mitigated wind-driven fire propagation, and made effective decisions.
 
 ## Projects
 
-* [Forest firefighters](projects/forest_firefighters).
-* [NVIDIA JetBot collision avoidance with neural networks](projects/nvidia-jetbot-collision-avoidance).
-* [SeRoNet box spawner using a REST API in an industrial environment](projects/seronet-spawner).
+* Original Repo;   [Forest firefighters](projects/forest_firefighters).
+
 
 ## How to Use it
 
-If not differently stated in the specific project description, you can simply download the project files and open them with Webots.
-Controllers and plugins written in C, C++ and Java have to be compiled before the first simulation run.
-Please note that you should download the files from the tag/release matching your Webots major version otherwise the simulation may not work correctly.
+You can simply download the project files and open them with Webots R2021b with python 3.9.
+
